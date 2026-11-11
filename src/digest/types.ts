@@ -24,11 +24,16 @@ export type DigestRow = {
   lastAt: string;
 };
 
-// What a night reads as. `badLines` counts lines that did not parse: counted, never thrown.
-// An empty file is { rows: [], badLines: 0 }; a night with no file is null (see readNight).
+// What a night reads as. `rows` are sorted by job (plain string compare); the page and the JSON
+// rely on that order and do not re-sort. `badLines` counts lines that did not parse: counted,
+// never thrown. `counts` is the number of parsed lines per status over the whole night (the
+// status board's ok / retry / fail). An empty file is
+// { rows: [], badLines: 0, counts: { ok: 0, retry: 0, fail: 0 } }; a night with no file is null
+// (see readNight).
 export type NightDigest = {
   rows: DigestRow[];
   badLines: number;
+  counts: { ok: number; retry: number; fail: number };
 };
 
 // The reader's signature: <runsDir>/<night>.jsonl, night as YYYY-MM-DD. Synchronous, like the
